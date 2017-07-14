@@ -1,66 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@drawable/gradient_background"
     android:orientation="horizontal"
-    tools:context="com.example.sidneyseay.noteapp.MainActivity">
-    <RelativeLayout
-        android:id="@+id/activity_main_title"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="@android:color/holo_orange_dark"
-        android:layout_alignParentTop="true">
+    tools:context="com.example.sidneyseay.noteapp.MainActivity"
+    >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/app_name"
-            android:textColor="@android:color/white"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:textSize="24sp"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/note_icon"
+        android:src="@drawable/task_notes_icon"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/note_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:text="Enter" />
 
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="66dp"
+        android:fontFamily="cursive"
+        android:text="Good Day Mate!"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50sp" />
 
-    <LinearLayout
-        android:id="@+id/activity_main_tool"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
-
-        <TextView
-            android:id="@+id/activity_note_write"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:text="Go"
-            android:textSize="22sp"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
-            android:textColor="@android:color/holo_red_light"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.05"
-            android:background="@android:color/darker_gray"></View>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/activity_main_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/activity_main_title"
-        android:layout_above="@id/activity_main_tool"
-        android:background="@android:color/darker_gray"
-        ></LinearLayout>
 
 </RelativeLayout>
