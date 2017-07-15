@@ -18,12 +18,13 @@
         />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/but1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/note_icon"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="44dp"
+        android:onClick="buttonOnClick"
         android:text="Enter" />
 
     <TextView
