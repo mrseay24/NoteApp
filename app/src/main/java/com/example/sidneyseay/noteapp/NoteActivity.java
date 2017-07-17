@@ -18,7 +18,7 @@ public class NoteActivity extends BaseActivity {
     private EditText mEtContent;
 
     private String mNoteFileName;
-    private WriteNoteActivity mLoadedNote;
+    private WriteNote mLoadedNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class NoteActivity extends BaseActivity {
 
         mNoteFileName = getIntent().getStringExtra("NOTE_FILE");
         if(mNoteFileName != null && !mNoteFileName.isEmpty()){
-            mLoadedNote = Utilities.getNoteByName(this, mNoteFileName);
+            mLoadedNote = Utilities.getNoteByFileName(this, mNoteFileName);
 
             if(mLoadedNote != null){
                 mEtTitle.setText(mLoadedNote.getmTitle());
@@ -64,7 +64,7 @@ public class NoteActivity extends BaseActivity {
 
 
     private void saveNote(){
-        WriteNoteActivity note;
+        WriteNote note;
 
         if(mEtTitle.getText().toString().trim().isEmpty() || mEtContent.getText().toString().trim().isEmpty()){
             Toast.makeText(this, "Please enter title and content", Toast.LENGTH_SHORT).show();
@@ -73,11 +73,11 @@ public class NoteActivity extends BaseActivity {
 
         if(mLoadedNote == null){
             //get current time of phone for new note
-            note = new WriteNoteActivity(System.currentTimeMillis(), mEtTitle.getText().toString(),
+            note = new WriteNote(System.currentTimeMillis(), mEtTitle.getText().toString(),
                     mEtContent.getText().toString());
         }else{
             //get time of the note itself
-            note = new WriteNoteActivity(mLoadedNote.getmDateTime(), mEtTitle.getText().toString(),
+            note = new WriteNote(mLoadedNote.getmDateTime(), mEtTitle.getText().toString(),
                     mEtContent.getText().toString());
 
         }
@@ -103,7 +103,7 @@ public class NoteActivity extends BaseActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Utilities.deleteNote(getApplicationContext()
+                            Utilities.deleteFile(getApplicationContext()
                                     , mLoadedNote.getmDateTime() + Utilities.FILE_EXTENSION);
                             Toast.makeText(getApplicationContext()
                                     , mEtTitle.getText().toString() + "is deleted", Toast.LENGTH_SHORT).show();

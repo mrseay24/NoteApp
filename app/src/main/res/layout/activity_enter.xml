@@ -9,26 +9,51 @@
 
 
     <Button
-        android:id="@+id/about_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="About NoteApp"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textAllCaps="false"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="392dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="136dp" />
-
-    <Button
         android:id="@+id/write_note_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
         android:text="Write a Note"
-        android:textColor="@android:color/holo_blue_dark"/>
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/mood_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mood"
+        android:textColor="@android:color/holo_blue_light"
+        android:layout_below="@+id/notegesture_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="61dp" />
+
+    <Button
+        android:id="@+id/waterbreak_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Water Break"
+        android:textColor="@android:color/holo_blue_light"
+        android:layout_below="@+id/write_note_button"
+        android:layout_alignStart="@+id/mood_button"
+        android:layout_marginTop="45dp" />
+
+    <Button
+        android:id="@+id/notegesture_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/waterbreak_button"
+        android:layout_below="@+id/waterbreak_button"
+        android:layout_marginTop="28dp"
+        android:text="Note Gesure"
+        android:textColor="@android:color/holo_blue_light"/>
+
+    <Button
+        android:id="@+id/checkitems_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/mood_button"
+        android:layout_below="@+id/mood_button"
+        android:layout_marginTop="55dp"
+        android:text="Check Items"
+        android:textColor="@android:color/holo_blue_light"/>
 
 </RelativeLayout>

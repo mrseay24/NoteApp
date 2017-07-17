@@ -16,11 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WriteNoteActivity" />
         <activity android:name=".DialogActivity" />
         <activity android:name=".EnterActivity" />
-        <activity android:name=".AboutActivity" />
+        <activity android:name=".WriteNoteActivity" />
+        <activity android:name=".CheckItemsActivity" />
         <activity android:name=".NoteActivity" />
+        <activity android:name=".AdvanceViewPagerActivity" />
+        <activity android:name=".WaterBreakActivity" />
+        <activity android:name=".NoteGestureActivity" />
     </application>
 
 </manifest>

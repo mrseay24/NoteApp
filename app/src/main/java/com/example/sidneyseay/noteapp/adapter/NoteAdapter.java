@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.sidneyseay.noteapp.R;
-import com.example.sidneyseay.noteapp.WriteNoteActivity;
+import com.example.sidneyseay.noteapp.WriteNote;
 
 import org.w3c.dom.Text;
 
@@ -21,8 +21,8 @@ import java.util.ArrayList;
  * Created by sidneyseay on 7/15/17.
  */
 
-public class NoteAdapter extends ArrayAdapter<WriteNoteActivity> {
-    public NoteAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<WriteNoteActivity> notes) {
+public class NoteAdapter extends ArrayAdapter<WriteNote> {
+    public NoteAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<WriteNote> notes) {
         super(context, resource, notes);
     }
 
@@ -35,7 +35,7 @@ public class NoteAdapter extends ArrayAdapter<WriteNoteActivity> {
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.item_note, null);
         }
-        WriteNoteActivity note = getItem(position);
+        WriteNote note = getItem(position);
 
         if(note != null){
             TextView title = (TextView) convertView.findViewById(R.id.list_note_title);

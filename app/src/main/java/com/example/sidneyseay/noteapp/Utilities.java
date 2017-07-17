@@ -1,6 +1,7 @@
 package com.example.sidneyseay.noteapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,99 +11,121 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-/**
- * Created by sidneyseay on 7/15/17.
- */
 
 public class Utilities {
 
+    public static final String EXTRAS_NOTE_FILENAME = "EXTRAS_NOTE_FILENAME";
     public static final String FILE_EXTENSION = ".bin";
 
-    public static boolean saveNote(Context context, WriteNoteActivity note){
+    /**
+     * Save a note on private storage of the app
+     * @param context Application's context
+     * @param note The note to be saved
+     */
+    public static boolean saveNote(Context context, WriteNote note) {
+
         String fileName = String.valueOf(note.getmDateTime()) + FILE_EXTENSION;
 
         FileOutputStream fos;
         ObjectOutputStream oos;
 
-        try {
+        try{
             fos = context.openFileOutput(fileName, context.MODE_PRIVATE);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(note);
             oos.close();
-            fos.close();
-
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-            return false;
 
+            return false;
         }
 
         return true;
     }
 
-    public static ArrayList<WriteNoteActivity> getAllSavedNotes(Context context){
-        ArrayList<WriteNoteActivity> notes = new ArrayList<>();
+    /**
+     * Read all saved
+     * @param context Application's context
+     * @return ArrayList of Note
+     */
+    static ArrayList<WriteNote> getAllSavedNotes(Context context) {
+        ArrayList<WriteNote> notes = new ArrayList<>();
 
         File filesDir = context.getFilesDir();
         ArrayList<String> noteFiles = new ArrayList<>();
 
-        for(String file : filesDir.list()){
-            if(file.endsWith(FILE_EXTENSION)){
+        //add .bin files to the noteFiles list
+        for(String file : filesDir.list()) {
+            if(file.endsWith(FILE_EXTENSION)) {
                 noteFiles.add(file);
             }
         }
 
+        //read objects and add to list of notes
         FileInputStream fis;
         ObjectInputStream ois;
 
-        for(int i = 0; i< noteFiles.size(); i++){
-            try {
+        for (int i = 0; i < noteFiles.size(); i++) {
+            try{
                 fis = context.openFileInput(noteFiles.get(i));
                 ois = new ObjectInputStream(fis);
 
-                notes.add((WriteNoteActivity) ois.readObject());
-
+                notes.add((WriteNote) ois.readObject());
                 fis.close();
                 ois.close();
 
-            } catch (IOException | ClassNotFoundException e){
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 return null;
             }
         }
+
         return notes;
     }
-    public static WriteNoteActivity getNoteByName(Context context, String fileName){
-        File file = new File(context.getFilesDir(), fileName);
-        WriteNoteActivity note;
 
-        if(file.exists()){
+    /**
+     * Loads a note file by its name
+     * @param context Application's context
+     * @param fileName Name of the note file
+     * @return A Note object, null if something goes wrong!
+     */
+    public static WriteNote getNoteByFileName(Context context, String fileName) {
+
+        File file = new File(context.getFilesDir(), fileName);
+        if(file.exists() && !file.isDirectory()) { //check if file actually exist
+
+            Log.v("UTILITIES", "File exist = " + fileName);
+
             FileInputStream fis;
             ObjectInputStream ois;
-            try{
+
+            try { //load the file
                 fis = context.openFileInput(fileName);
                 ois = new ObjectInputStream(fis);
-
-                note = (WriteNoteActivity) ois.readObject();
-
+                WriteNote note = (WriteNote) ois.readObject();
                 fis.close();
                 ois.close();
 
-            } catch (IOException | ClassNotFoundException e){
+                return note;
+
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 return null;
             }
-            return note;
+
+        } else {
+            return null;
         }
-        return null;
     }
 
-    public static void deleteNote(Context context, String fileName) {
-        File dir = context.getFilesDir();
-        File file = new File(dir, fileName);
+    public static boolean deleteFile(Context context, String fileName) {
+        File dirFiles = context.getFilesDir();
+        File file = new File(dirFiles, fileName);
 
-        if(file.exists()){
-            file.delete();
+        if(file.exists() && !file.isDirectory()) {
+            return file.delete();
         }
+
+        return false;
     }
 }

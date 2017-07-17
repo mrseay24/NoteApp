@@ -1,6 +1,5 @@
 package com.example.sidneyseay.noteapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,62 +12,20 @@ import android.widget.Toast;
 
 import com.example.sidneyseay.noteapp.adapter.NoteAdapter;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.Collections;
+import java.util.Comparator;
 
-import butterknife.ButterKnife;
+public class WriteNoteActivity extends BaseActivity {
 
-public class WriteNoteActivity extends BaseActivity implements Serializable {
-
-    private ListView mListViewNotes;
-
-    public WriteNoteActivity(){
-
-    }
-
-    public WriteNoteActivity(long l, String s, String s1) {
-        super();
-    }
-
+    private ListView mListNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_note);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_main);
 
-        mListViewNotes = (ListView) findViewById(R.id.listview_notes);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mListViewNotes.setAdapter(null);
-
-        ArrayList<WriteNoteActivity> notes = Utilities.getAllSavedNotes(this);
-
-        if(notes == null || notes.size()==0){
-            Toast.makeText(this, "You have no saved notes!", Toast.LENGTH_SHORT).show();
-            return;
-        } else{
-            NoteAdapter na = new NoteAdapter(this, R.layout.item_note, notes);
-            mListViewNotes.setAdapter(na);
-            mListViewNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    String fileName = ((WriteNoteActivity) mListViewNotes.getItemAtPosition(position)).getmDateTime()
-                            + Utilities.FILE_EXTENSION;
-
-                    Intent viewNoteIntent = new Intent(getApplicationContext(), NoteActivity.class);
-                    viewNoteIntent.putExtra("NOTE_FILE", fileName);
-                    startActivity(viewNoteIntent);
-
-                }
-            });
-        }
+        mListNotes = (ListView) findViewById(R.id.listview_notes);
     }
 
     @Override
@@ -79,54 +36,61 @@ public class WriteNoteActivity extends BaseActivity implements Serializable {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_main_new_note:
-                //Start NoteActivity
+
+        switch (item.getItemId()) {
+            case R.id.action_create: //run NoteActivity in new note mode
                 startActivity(new Intent(this, NoteActivity.class));
                 break;
+
+            case R.id.action_settings:
+                //TODO show settings activity
+                break;
         }
-        return true;
+
+        return super.onOptionsItemSelected(item);
     }
 
-    private long mDateTime;
-    private String mTitle;
-    private String mContent;
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-    public WriteNoteActivity(ListView mListViewNotes, long dateTime, String title, String content) {
-        this.mListViewNotes = mListViewNotes;
-        this.mDateTime = dateTime;
-        this.mTitle = title;
-        this.mContent = content;
+        //load saved notes into the listview
+        //first, reset the listview
+        mListNotes.setAdapter(null);
+        ArrayList<WriteNote> notes = Utilities.getAllSavedNotes(getApplicationContext());
+
+        //sort notes from new to old
+        Collections.sort(notes, new Comparator<WriteNote>() {
+            @Override
+            public int compare(WriteNote lhs, WriteNote rhs) {
+                if(lhs.getmDateTime() > rhs.getmDateTime()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+
+        if(notes != null && notes.size() > 0) { //check if we have any notes!
+            final NoteAdapter na = new NoteAdapter(this, R.layout.item_note, notes);
+            mListNotes.setAdapter(na);
+
+            //set click listener for items in the list, by clicking each item the note should be loaded into NoteActivity
+            mListNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //run the NoteActivity in view/edit mode
+                    String fileName = ((WriteNote) mListNotes.getItemAtPosition(position)).getmDateTime()
+                            + Utilities.FILE_EXTENSION;
+                    Intent viewNoteIntent = new Intent(getApplicationContext(), NoteActivity.class);
+                    viewNoteIntent.putExtra(Utilities.FILE_EXTENSION, fileName);
+                    startActivity(viewNoteIntent);
+                }
+            });
+        } else { //remind user that we have no notes!
+            Toast.makeText(getApplicationContext(), "you have no saved notes!\ncreate some new notes :)"
+                    , Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void setmDateTime(long dateTime) {
-        this.mDateTime = dateTime;
-    }
-
-    public void setmTitle(String title) {
-        this.mTitle = title;
-    }
-
-    public void setmContent(String content) {
-        this.mContent = content;
-    }
-
-    public long getmDateTime() {
-        return mDateTime;
-    }
-
-    public String getmTitle() {
-        return mTitle;
-    }
-
-    public String getmContent() {
-        return mContent;
-    }
-
-    public String getDateTimeFormatted(Context context){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",
-                context.getResources().getConfiguration().locale);
-        sdf.setTimeZone(TimeZone.getDefault());
-        return sdf.format(new Date(mDateTime));
-    }
 }

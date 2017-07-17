@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.sidneyseay.noteapp.CheckItemsActivity">
+
+    <CheckBox
+        android:id="@+id/activity_checkbox_1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Songs"/>
+
+    <CheckBox
+        android:id="@+id/activity_checkbox_2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Shopping List"/>
+
+    <CheckBox
+        android:id="@+id/activity_checkbox_3"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Class Notes"/>
+
+    <Button
+        android:id="@+id/activity_check_boxsubmit"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:text="Submit"/>
+
+</LinearLayout>
