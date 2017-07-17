@@ -16,9 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DialogActivity" />
-        <activity android:name=".EnterActivity" />
         <activity android:name=".WriteNoteActivity" />
+        <activity android:name=".EnterActivity" />
         <activity android:name=".CheckItemsActivity" />
         <activity android:name=".NoteActivity" />
         <activity android:name=".AdvanceViewPagerActivity" />

@@ -3,6 +3,7 @@ package com.example.sidneyseay.noteapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ListViewCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,16 +17,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import butterknife.ButterKnife;
+
 public class WriteNoteActivity extends BaseActivity {
 
-    private ListView mListNotes;
+    private ListView mListViewNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_write_note);
+        ButterKnife.bind(this);
 
-        mListNotes = (ListView) findViewById(R.id.listview_notes);
+        mListViewNotes = (ListView) findViewById(R.id.listview_notes);
     }
 
     @Override
@@ -38,58 +42,40 @@ public class WriteNoteActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.action_create: //run NoteActivity in new note mode
+            case R.id.action_main_new_note:
                 startActivity(new Intent(this, NoteActivity.class));
-                break;
-
-            case R.id.action_settings:
-                //TODO show settings activity
                 break;
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mListViewNotes.setAdapter(null);
 
-        //load saved notes into the listview
-        //first, reset the listview
-        mListNotes.setAdapter(null);
-        ArrayList<WriteNote> notes = Utilities.getAllSavedNotes(getApplicationContext());
+        ArrayList<WriteNote> notes = Utilities.getAllSavedNotes(this);
 
-        //sort notes from new to old
-        Collections.sort(notes, new Comparator<WriteNote>() {
-            @Override
-            public int compare(WriteNote lhs, WriteNote rhs) {
-                if(lhs.getmDateTime() > rhs.getmDateTime()) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            }
-        });
+        if(notes == null || notes.size() == 0){
+            Toast.makeText(this, "You do not have any notes saved.", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            NoteAdapter na = new NoteAdapter(this, R.layout.item_note, notes);
+            mListViewNotes.setAdapter(na);
 
-        if(notes != null && notes.size() > 0) { //check if we have any notes!
-            final NoteAdapter na = new NoteAdapter(this, R.layout.item_note, notes);
-            mListNotes.setAdapter(na);
-
-            //set click listener for items in the list, by clicking each item the note should be loaded into NoteActivity
-            mListNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            mListViewNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //run the NoteActivity in view/edit mode
-                    String fileName = ((WriteNote) mListNotes.getItemAtPosition(position)).getmDateTime()
+                    String fileName = ((WriteNote)mListViewNotes.getItemAtPosition(position)).getmDateTime()
                             + Utilities.FILE_EXTENSION;
+
                     Intent viewNoteIntent = new Intent(getApplicationContext(), NoteActivity.class);
-                    viewNoteIntent.putExtra(Utilities.FILE_EXTENSION, fileName);
+                    viewNoteIntent.putExtra("NOTE_FILE", fileName);
                     startActivity(viewNoteIntent);
                 }
             });
-        } else { //remind user that we have no notes!
-            Toast.makeText(getApplicationContext(), "you have no saved notes!\ncreate some new notes :)"
-                    , Toast.LENGTH_SHORT).show();
+
         }
     }
 

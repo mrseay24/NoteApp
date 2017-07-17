@@ -1,9 +1,7 @@
 package com.example.sidneyseay.noteapp.adapter;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,31 +11,28 @@ import android.widget.TextView;
 import com.example.sidneyseay.noteapp.R;
 import com.example.sidneyseay.noteapp.WriteNote;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by sidneyseay on 7/15/17.
- */
 
 public class NoteAdapter extends ArrayAdapter<WriteNote> {
-    public NoteAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<WriteNote> notes) {
+
+    public static final int WRAP_CONTENT_LENGTH = 50;
+    public NoteAdapter(Context context, int resource, ArrayList<WriteNote> notes) {
         super(context, resource, notes);
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        //return super.getView(position, convertView, parent);
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null){
+        if(convertView == null) {
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.item_note, null);
         }
+
         WriteNote note = getItem(position);
 
-        if(note != null){
+        if(note != null) {
             TextView title = (TextView) convertView.findViewById(R.id.list_note_title);
             TextView date = (TextView) convertView.findViewById(R.id.list_note_date);
             TextView content = (TextView) convertView.findViewById(R.id.list_note_content);
@@ -45,12 +40,25 @@ public class NoteAdapter extends ArrayAdapter<WriteNote> {
             title.setText(note.getmTitle());
             date.setText(note.getDateTimeFormatted(getContext()));
 
-            if(note.getmContent().length() > 50){
-                content.setText(note.getmContent().substring(0,50));
-            } else{
+            //correctly show preview of the content (not more than 50 char or more than one line!)
+            int toWrap = WRAP_CONTENT_LENGTH;
+            int lineBreakIndex = note.getmContent().indexOf('\n');
+            //not an elegant series of if statements...needs to be cleaned up!
+            if(note.getmContent().length() > WRAP_CONTENT_LENGTH || lineBreakIndex < WRAP_CONTENT_LENGTH) {
+                if(lineBreakIndex < WRAP_CONTENT_LENGTH) {
+                    toWrap = lineBreakIndex;
+                }
+                if(toWrap > 0) {
+                    content.setText(note.getmContent().substring(0, toWrap) + "...");
+                } else {
+                    content.setText(note.getmContent());
+                }
+            } else {
                 content.setText(note.getmContent());
             }
         }
+
         return convertView;
     }
+
 }

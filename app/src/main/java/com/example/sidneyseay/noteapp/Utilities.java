@@ -89,12 +89,12 @@ public class Utilities {
      * @param fileName Name of the note file
      * @return A Note object, null if something goes wrong!
      */
-    public static WriteNote getNoteByFileName(Context context, String fileName) {
+    public static WriteNote getNoteByName(Context context, String fileName) {
 
         File file = new File(context.getFilesDir(), fileName);
-        if(file.exists() && !file.isDirectory()) { //check if file actually exist
+        WriteNote note;
 
-            Log.v("UTILITIES", "File exist = " + fileName);
+        if(file.exists()) { //check if file actually exist
 
             FileInputStream fis;
             ObjectInputStream ois;
@@ -102,30 +102,31 @@ public class Utilities {
             try { //load the file
                 fis = context.openFileInput(fileName);
                 ois = new ObjectInputStream(fis);
-                WriteNote note = (WriteNote) ois.readObject();
+
+                note = (WriteNote) ois.readObject();
+
                 fis.close();
                 ois.close();
 
-                return note;
 
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 return null;
             }
+            return note;
 
-        } else {
-            return null;
         }
+            return null;
+
     }
 
-    public static boolean deleteFile(Context context, String fileName) {
-        File dirFiles = context.getFilesDir();
-        File file = new File(dirFiles, fileName);
 
-        if(file.exists() && !file.isDirectory()) {
-            return file.delete();
+    public static void deleteNote(Context context, String fileName) {
+        File dir = context.getFilesDir();
+        File file = new File(dir, fileName);
+
+        if(file.exists()){
+            file.delete();
         }
-
-        return false;
     }
 }

@@ -31,7 +31,7 @@ public class NoteActivity extends BaseActivity {
 
         mNoteFileName = getIntent().getStringExtra("NOTE_FILE");
         if(mNoteFileName != null && !mNoteFileName.isEmpty()){
-            mLoadedNote = Utilities.getNoteByFileName(this, mNoteFileName);
+            mLoadedNote = Utilities.getNoteByName(this, mNoteFileName);
 
             if(mLoadedNote != null){
                 mEtTitle.setText(mLoadedNote.getmTitle());
@@ -102,8 +102,8 @@ public class NoteActivity extends BaseActivity {
                     .setMessage("You are about to delete" + mEtTitle.getText().toString() + ", are you sure?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Utilities.deleteFile(getApplicationContext()
+                        public void onClick(DialogInterface dialog, int which) {
+                            Utilities.deleteNote(getApplicationContext()
                                     , mLoadedNote.getmDateTime() + Utilities.FILE_EXTENSION);
                             Toast.makeText(getApplicationContext()
                                     , mEtTitle.getText().toString() + "is deleted", Toast.LENGTH_SHORT).show();
